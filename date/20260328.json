@@ -1,0 +1,603 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [
+    {
+      "symbol": "7721",
+      "name": "微程式",
+      "close": 61.2,
+      "change": 9.87,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 76,
+        "limit_up_date": "2026-02-25",
+        "gap_idx": 77,
+        "gap_date": "2026-02-26",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 1.89
+      },
+      "passed": true,
+      "passed_count": 4
+    },
+    {
+      "symbol": "1309",
+      "name": "台達化",
+      "close": 22.15,
+      "change": 9.93,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 78,
+        "gap_date": "2026-03-02",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 1.79
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "1324",
+      "name": "地球",
+      "close": 10.6,
+      "change": -0.93,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 46,
+        "limit_up_date": "2026-01-05",
+        "gap_idx": 47,
+        "gap_date": "2026-01-06",
+        "volume_ratio": 1.62
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "1447",
+      "name": "力鵬",
+      "close": 5.22,
+      "change": 2.15,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 61,
+        "limit_up_date": "2026-01-26",
+        "gap_idx": 62,
+        "gap_date": "2026-01-27",
+        "volume_ratio": 1.47
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "1905",
+      "name": "華紙",
+      "close": 15.4,
+      "change": 10.0,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 75,
+        "gap_date": "2026-02-24",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 7.88
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2022",
+      "name": "聚亨",
+      "close": 9.15,
+      "change": -1.51,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 48,
+        "limit_up_date": "2026-01-07",
+        "gap_idx": 49,
+        "gap_date": "2026-01-08",
+        "volume_ratio": 1.27
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2305",
+      "name": "全友",
+      "close": 17.3,
+      "change": 7.12,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 47,
+        "limit_up_date": "2026-01-06",
+        "gap_idx": 48,
+        "gap_date": "2026-01-07",
+        "volume_ratio": 2.52
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2355",
+      "name": "敬鵬",
+      "close": 50.5,
+      "change": 2.23,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 76,
+        "gap_date": "2026-02-25",
+        "consecutive_red": 5,
+        "is_new_high": true,
+        "volume_ratio": 1.83
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2419",
+      "name": "仲琦",
+      "close": 35.4,
+      "change": 6.47,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 84,
+        "gap_date": "2026-03-10",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 3.9
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2467",
+      "name": "志聖",
+      "close": 414.5,
+      "change": 0.12,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 71,
+        "gap_date": "2026-02-09",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 1.83
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2484",
+      "name": "希華",
+      "close": 30.9,
+      "change": 9.96,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 52,
+        "limit_up_date": "2026-01-13",
+        "gap_idx": 53,
+        "gap_date": "2026-01-14",
+        "volume_ratio": 3.08
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2616",
+      "name": "山隆",
+      "close": 17.3,
+      "change": 0.0,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 78,
+        "limit_up_date": "2026-03-02",
+        "gap_idx": 78,
+        "gap_date": "2026-03-02",
+        "volume_ratio": 1.75
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2702",
+      "name": "華園",
+      "close": 12.3,
+      "change": 0.41,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 76,
+        "gap_date": "2026-02-25",
+        "consecutive_red": 4,
+        "is_new_high": true,
+        "volume_ratio": 2.3
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3005",
+      "name": "神基",
+      "close": 107.0,
+      "change": -2.28,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 78,
+        "limit_up_date": "2026-03-02",
+        "gap_idx": 84,
+        "gap_date": "2026-03-10",
+        "volume_ratio": 1.22
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3023",
+      "name": "信邦",
+      "close": 263.5,
+      "change": 6.68,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 61,
+        "limit_up_date": "2026-01-26",
+        "gap_idx": 62,
+        "gap_date": "2026-01-27",
+        "volume_ratio": 2.3
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3062",
+      "name": "建漢",
+      "close": 27.95,
+      "change": 9.82,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 73,
+        "gap_date": "2026-02-11",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 2.47
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3591",
+      "name": "艾笛森",
+      "close": 20.3,
+      "change": -4.02,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 54,
+        "limit_up_date": "2026-01-15",
+        "gap_idx": 55,
+        "gap_date": "2026-01-16",
+        "volume_ratio": 2.19
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "4414",
+      "name": "如興",
+      "close": 11.65,
+      "change": -4.51,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 87,
+        "limit_up_date": "2026-03-13",
+        "gap_idx": 88,
+        "gap_date": "2026-03-16",
+        "volume_ratio": 1.99
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "4532",
+      "name": "瑞智",
+      "close": 27.45,
+      "change": 1.29,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 84,
+        "gap_date": "2026-03-10",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 1.59
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "4958",
+      "name": "臻鼎-KY",
+      "close": 230.0,
+      "change": 5.26,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 74,
+        "gap_date": "2026-02-23",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 1.25
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "5292",
+      "name": "華懋",
+      "close": 253.5,
+      "change": 8.1,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 96,
+        "gap_date": "2026-03-26",
+        "consecutive_red": 5,
+        "is_new_high": true,
+        "volume_ratio": 6.24
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "6277",
+      "name": "宏正",
+      "close": 71.9,
+      "change": 9.94,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 85,
+        "gap_date": "2026-03-11",
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 5.83
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "6581",
+      "name": "鋼聯",
+      "close": 106.5,
+      "change": 0.28,
+      "conditions": {
+        "c1_limit_up": false,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "gap_idx": 74,
+        "gap_date": "2026-02-23",
+        "consecutive_red": 5,
+        "is_new_high": true,
+        "volume_ratio": 1.2
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "6861",
+      "name": "睿生光電",
+      "close": 138.0,
+      "change": -4.5,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 46,
+        "limit_up_date": "2026-01-05",
+        "gap_idx": 46,
+        "gap_date": "2026-01-05",
+        "volume_ratio": 1.3
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "8215",
+      "name": "明基材",
+      "close": 23.4,
+      "change": 1.74,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 47,
+        "limit_up_date": "2026-01-06",
+        "gap_idx": 48,
+        "gap_date": "2026-01-07",
+        "volume_ratio": 1.39
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "8466",
+      "name": "美吉吉-KY",
+      "close": 17.85,
+      "change": 0.85,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 55,
+        "limit_up_date": "2026-01-16",
+        "gap_idx": 55,
+        "gap_date": "2026-01-16",
+        "volume_ratio": 1.64
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "9919",
+      "name": "康那香",
+      "close": 15.5,
+      "change": -0.32,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 62,
+        "limit_up_date": "2026-01-27",
+        "gap_idx": 62,
+        "gap_date": "2026-01-27",
+        "volume_ratio": 1.77
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "9931",
+      "name": "欣高",
+      "close": 39.35,
+      "change": -0.25,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 80,
+        "limit_up_date": "2026-03-04",
+        "gap_idx": 81,
+        "gap_date": "2026-03-05",
+        "volume_ratio": 1.43
+      },
+      "passed": true,
+      "passed_count": 3
+    }
+  ],
+  "generated": "2026-03-28T11:33:58.147265"
+}
