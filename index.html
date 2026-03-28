@@ -1,1 +1,61 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>長線翻倍選股</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--surface:#111318;--border:#1e2530;--accent:#f0b429;--accent2:#e05c2f;--text:#e8eaf0;--muted:#6b7280}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Sans TC",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(240,180,41,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 90%,rgba(56,189,248,.05) 0%,transparent 50%);pointer-events:none}
+.container{max-width:680px;width:100%;text-align:center;position:relative;z-index:1}
+.logo{font-family:"Oswald",sans-serif;font-size:clamp(36px,8vw,64px);font-weight:700;letter-spacing:3px;background:linear-gradient(135deg,var(--accent) 0%,#fff8e7 50%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:12px}
+.sub{font-size:12px;color:var(--muted);letter-spacing:4px;text-transform:uppercase;margin-bottom:48px}
+.reports{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:24px}
+.reports-header{padding:16px 24px;border-bottom:1px solid var(--border);font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;text-align:left}
+.report-item{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);transition:background .2s}
+.report-item:last-child{border-bottom:none}
+.report-item:hover{background:rgba(240,180,41,.05)}
+.report-date{font-family:"Oswald",sans-serif;font-size:20px;color:var(--accent);letter-spacing:1px}
+.report-arrow{color:var(--muted);font-size:18px;transition:transform .2s}
+.report-item:hover .report-arrow{transform:translateX(4px);color:var(--accent)}
+.latest-badge{font-size:10px;background:rgba(240,180,41,.15);color:var(--accent);border:1px solid rgba(240,180,41,.3);padding:2px 8px;border-radius:20px;letter-spacing:1px}
+.footer{font-size:11px;color:var(--muted);letter-spacing:1px}
+.loading{padding:40px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">長線翻倍選股</div>
+  <div class="sub">Long-term Doubling Stock Screener</div>
+  <div class="reports">
+    <div class="reports-header">掃描報告列表</div>
+    <div id="report-list"><div class="loading">載入中...</div></div>
+  </div>
+  <div class="footer">資料來源：Yahoo Finance · 僅供參考，不構成投資建議</div>
+</div>
+<script>
+async function loadReports(){
+  const list=document.getElementById("report-list");
+  try{
+    const res=await fetch("date/reports.json?v="+Date.now());
+    const reports=await res.json();
+    if(!reports||reports.length===0){list.innerHTML="<div class=loading>尚無報告</div>";return}
+    list.innerHTML="";
+    reports.sort((a,b)=>b.localeCompare(a));
+    reports.forEach((d,i)=>{
+      const y=d.slice(0,4),m=d.slice(4,6),day=d.slice(6,8);
+      const a=document.createElement("a");
+      a.className="report-item";
+      a.href="date/"+d+".html";
+      a.innerHTML=`<div style="display:flex;align-items:center;gap:12px"><div class="report-date">${y}.${m}.${day}</div>${i===0?'<span class="latest-badge">最新</span>':""}</div><div class="report-arrow">→</div>`;
+      list.appendChild(a);
+    });
+  }catch(e){list.innerHTML="<div class=loading>找不到報告資料</div>"}
+}
+loadReports();
+</script>
+</body>
+</html>
