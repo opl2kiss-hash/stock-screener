@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.stock_list_cache.json
+scan.log
+nohup.out
+.DS_Store
+date/2*.json
