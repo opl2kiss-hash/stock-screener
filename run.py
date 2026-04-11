@@ -12,6 +12,13 @@
   python run.py --no-open          # 掃完不自動開瀏覽器
 """
 
+import resource as _resource
+try:
+    _soft, _hard = _resource.getrlimit(_resource.RLIMIT_NOFILE)
+    _resource.setrlimit(_resource.RLIMIT_NOFILE, (min(_hard, 65536), _hard))
+except Exception:
+    pass
+
 import sys
 import os
 import json
@@ -162,17 +169,20 @@ def main():
     # 生成 HTML
     from html_generator import generate_html_report
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(base_dir, "date")
+    output_dir = os.path.join(base_dir, "data")
     
     filepath = generate_html_report(results, config, output_dir)
     
     # 儲存 JSON 結果
     json_path = filepath.replace('.html', '.json')
-    with open(json_path, 'w', encoding='utf-8') as f:
-        json.dump({"config": config, "results": results, 
-                   "generated": datetime.now().isoformat()}, f, 
-                  ensure_ascii=False, indent=2)
-    print(f"📊 JSON 資料已儲存：{json_path}")
+    try:
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump({"config": config, "results": results,
+                       "generated": datetime.now().isoformat()}, f,
+                      ensure_ascii=False, indent=2)
+        print(f"📊 JSON 資料已儲存：{json_path}")
+    except Exception as e:
+        print(f"⚠️  JSON 儲存失敗（不影響後續部署）：{e}")
     
     # 自動開啟瀏覽器
     if not args.no_open:
@@ -189,6 +199,81 @@ def main():
     
     print(f"\n✅ 完成！共找到 {len(results)} 檔符合條件的股票")
     print(f"📁 檔案位置：{filepath}")
+
+    # ── 自動部署到 GitHub Pages ──
+    import shutil, json, glob
+    git_dir = os.path.dirname(os.path.abspath(__file__))
+
+    if os.path.isdir(os.path.join(git_dir, ".git")):
+        try:
+            today_str = datetime.now().strftime("%Y%m%d")
+            date_dir  = os.path.join(git_dir, "date")
+            os.makedirs(date_dir, exist_ok=True)
+
+            # 複製到 date/ 資料夾（GitHub Pages 索引頁讀取此處）
+            dest = os.path.join(date_dir, f"{today_str}.html")
+            shutil.copy2(filepath, dest)
+            print(f"📋 已複製報告到 date/{today_str}.html")
+
+            # 更新 reports.json 清單
+            htmls = glob.glob(os.path.join(date_dir, "????????.html"))
+            dates = sorted(
+                [os.path.basename(f).replace(".html", "") for f in htmls],
+                reverse=True
+            )
+            json_path = os.path.join(date_dir, "reports.json")
+            with open(json_path, "w", encoding="utf-8") as f:
+                json.dump(dates, f)
+
+            print(f"\n📤 正在上傳到 GitHub Pages...")
+
+            # git add
+            r_add = subprocess.run(
+                ["git", "-C", git_dir, "add",
+                 f"date/{today_str}.html", "date/reports.json"],
+                capture_output=True, text=True
+            )
+            if r_add.returncode != 0:
+                print(f"⚠️  git add 失敗：{r_add.stderr.strip()}")
+
+            # git commit（若無新變更會回傳 1，屬正常）
+            r_commit = subprocess.run(
+                ["git", "-C", git_dir, "commit", "-m", f"掃描報告 {today_str}"],
+                capture_output=True, text=True
+            )
+            if r_commit.returncode == 0:
+                print(f"📝 已建立 commit：掃描報告 {today_str}")
+            else:
+                # nothing to commit 也算正常
+                if "nothing to commit" in r_commit.stdout or "nothing to commit" in r_commit.stderr:
+                    print(f"ℹ️  無新變更需要 commit（可能已是最新）")
+                else:
+                    print(f"⚠️  git commit 警告：{r_commit.stderr.strip() or r_commit.stdout.strip()}")
+
+            # git push（最多重試 2 次）
+            push_ok = False
+            for attempt in range(1, 3):
+                r = subprocess.run(
+                    ["git", "-C", git_dir, "push", "origin", "main"],
+                    capture_output=True, text=True, timeout=60
+                )
+                if r.returncode == 0:
+                    push_ok = True
+                    break
+                else:
+                    print(f"⚠️  推送嘗試 {attempt}/2 失敗：{r.stderr.strip()}")
+
+            if push_ok:
+                print(f"✅ 上傳成功！1~2分鐘後可在此查看：")
+                print(f"   https://opl2kiss-hash.github.io/stock-screener/")
+            else:
+                print(f"❌ 推送失敗，請手動執行桌面的「推送最新報告到GitHub.command」")
+
+        except Exception as e:
+            print(f"⚠️  自動部署錯誤：{e}")
+            print(f"   請手動執行桌面的「推送最新報告到GitHub.command」")
+    else:
+        print("ℹ️  找不到 git 設定，跳過自動上傳")
 
 if __name__ == "__main__":
     main()
