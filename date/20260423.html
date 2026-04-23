@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>長線翻倍選股 — 20260423</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #1e2530;
+    --accent: #f0b429;
+    --accent2: #e05c2f;
+    --green: #22d47a;
+    --red: #f05060;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --c1: #f0b429;
+    --c2: #7c6af5;
+    --c3: #22d47a;
+    --c4: #38bdf8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 背景紋理 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(240,180,41,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(56,189,248,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .logo-area {}
+
+  .logo-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--accent) 0%, #fff8e7 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 4px;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  .header-meta {
+    text-align: right;
+  }
+
+  .meta-date {
+    font-family: 'Oswald', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .meta-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+    justify-content: flex-end;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  /* 篩選面板 */
+  .filter-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+
+  .filter-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .filter-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 13px;
+    user-select: none;
+  }
+
+  .filter-checkbox:hover { border-color: var(--accent); background: rgba(240,180,41,0.05); }
+  .filter-checkbox.active { border-color: var(--accent); background: rgba(240,180,41,0.1); color: var(--accent); }
+
+  .filter-checkbox input { display: none; }
+
+  .cond-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .dot-c1 { background: var(--c1); }
+  .dot-c2 { background: var(--c2); }
+  .dot-c3 { background: var(--c3); }
+  .dot-c4 { background: var(--c4); }
+
+  .filter-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 7px 12px;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    outline: none;
+    width: 100%;
+  }
+
+  .filter-select:focus { border-color: var(--accent); }
+
+  .filter-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+  .btn-primary:hover { background: #ffc947; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .result-count {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .result-count span {
+    color: var(--accent);
+    font-weight: 700;
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+  }
+
+  /* 股票格線 */
+  .stocks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  /* 股票卡片 */
+  .stock-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .stock-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .stock-card:hover {
+    border-color: rgba(240,180,41,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(240,180,41,0.1);
+  }
+
+  .stock-card:hover::before { opacity: 1; }
+
+  .stock-card.hidden { display: none; }
+
+  .card-link {
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .stock-code {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .stock-name {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .stock-group {
+    display: inline-block;
+    font-size: 10px;
+    color: #79c0ff;
+    background: rgba(56,139,253,0.12);
+    border: 1px solid rgba(56,139,253,0.25);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-top: 5px;
+    letter-spacing: 0.5px;
+  }
+
+  .price-info { text-align: right; }
+
+  .price {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .change {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .change.positive { color: var(--red); }  /* 台股漲紅跌綠 */
+  .change.negative { color: var(--green); }
+
+  /* 分數進度條 */
+  .score-bar {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .score-label {
+    position: absolute;
+    right: 0;
+    top: -18px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* 條件徽章 */
+  .badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    border: 1px solid;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  .badge.active { opacity: 1; }
+
+  .badge-c1 { color: var(--c1); border-color: var(--c1); background: rgba(240,180,41,0.08); }
+  .badge-c2 { color: var(--c2); border-color: var(--c2); background: rgba(124,106,245,0.08); }
+  .badge-c3 { color: var(--c3); border-color: var(--c3); background: rgba(34,212,122,0.08); }
+  .badge-c4 { color: var(--c4); border-color: var(--c4); background: rgba(56,189,248,0.08); }
+
+  /* 詳情 */
+  .details {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    min-height: 22px;
+  }
+
+  .detail-item {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* 查看按鈕 */
+  .view-btn {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-align: right;
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.2s;
+  }
+
+  .stock-card:hover .view-btn {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* 無結果 */
+  .no-result {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+    font-size: 16px;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* 捲軸 */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 600px) {
+    .header-inner { flex-direction: column; align-items: flex-start; }
+    .header-meta { text-align: left; }
+    .meta-stats { justify-content: flex-start; }
+    .stocks-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-inner">
+      <div class="logo-area">
+        <div class="logo-title">長線翻倍選股</div>
+        <div class="logo-sub">Long-term Doubling Stock Screener</div>
+      </div>
+      <div class="header-meta">
+        <div class="meta-date">2026.04.23</div>
+        <div class="meta-stats">
+          <div class="stat-item">
+            <div class="stat-num" id="shown-count">7</div>
+            <div class="stat-label">篩出股票</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">0</div>
+            <div class="stat-label">全條件符合</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 篩選面板 -->
+  <div class="filter-panel">
+    <div class="filter-title">條件篩選</div>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <div class="filter-label">必要條件（可多選）</div>
+        <div class="filter-row" style="flex-wrap:wrap; gap:8px;">
+          <label class="filter-checkbox" id="cb1">
+            <input type="checkbox" onchange="applyFilter()">
+            <span class="cond-dot dot-c1"></span>
+            漲停整理
+          </label>
+          <label class="filter-checkbox" id="cb2">
+            <input type="checkbox" onchange="applyFilter()">
+            <span class="cond-dot dot-c2"></span>
+            跳空缺口
+          </label>
+          <label class="filter-checkbox" id="cb3">
+            <input type="checkbox" onchange="applyFilter()">
+            <span class="cond-dot dot-c3"></span>
+            新高+紅K
+          </label>
+          <label class="filter-checkbox" id="cb4">
+            <input type="checkbox" onchange="applyFilter()">
+            <span class="cond-dot dot-c4"></span>
+            量能增加
+          </label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">最低通過條件數</div>
+        <select class="filter-select" id="min-score" onchange="applyFilter()">
+          <option value="1">1 項以上</option>
+          <option value="2">2 項以上</option>
+          <option value="3" selected>3 項以上</option>
+          <option value="4">全部 4 項</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="filter-label">排序方式</div>
+        <select class="filter-select" id="sort-by" onchange="applyFilter()">
+          <option value="score">條件分數（高→低）</option>
+          <option value="change-up">漲幅（高→低）</option>
+          <option value="change-down">跌幅（低→高）</option>
+          <option value="price-up">股價（高→低）</option>
+          <option value="price-down">股價（低→高）</option>
+        </select>
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary" onclick="applyFilter()">套用篩選</button>
+      <button class="btn btn-ghost" onclick="resetFilter()">重置</button>
+      <div class="result-count">顯示 <span id="shown-count2">7</span> 檔</div>
+    </div>
+  </div>
+
+  <!-- 股票清單 -->
+  <div class="stocks-grid" id="stocks-grid">
+    
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/1776/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">1776</div>
+                        <div class="stock-name">展宇</div>
+                        <div class="stock-group">化學工業</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">16.4</div>
+                        <div class="change negative">-1.2%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-03-16（26日前）</span><span class="detail-item">跳空：2026-03-17（漲停後第1日）</span><span class="detail-item">量比：1.82x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/2357/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">2357</div>
+                        <div class="stock-name">華碩</div>
+                        <div class="stock-group">電腦及週邊設備業</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">598.0</div>
+                        <div class="change negative">-1.81%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-03-11（29日前）</span><span class="detail-item">跳空：2026-03-12（漲停後第1日）</span><span class="detail-item">量比：1.4x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/4938/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">4938</div>
+                        <div class="stock-name">和碩</div>
+                        <div class="stock-group">電腦及週邊設備業</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">84.0</div>
+                        <div class="change negative">-0.83%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-03-12（28日前）</span><span class="detail-item">跳空：2026-03-18（漲停後第4日）</span><span class="detail-item">量比：1.85x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/5288/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">5288</div>
+                        <div class="stock-name">豐祥-KY</div>
+                        <div class="stock-group">電機機械</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">172.0</div>
+                        <div class="change negative">-2.27%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-04-13（8日前）</span><span class="detail-item">跳空：2026-04-14（漲停後第1日）</span><span class="detail-item">量比：1.72x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/6278/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">6278</div>
+                        <div class="stock-name">台表科</div>
+                        <div class="stock-group">光電業</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">142.5</div>
+                        <div class="change negative">-9.81%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-04-10（9日前）</span><span class="detail-item">跳空：2026-04-13（漲停後第1日）</span><span class="detail-item">量比：2.04x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/6902/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">6902</div>
+                        <div class="stock-name">GOGOLOOK</div>
+                        <div class="stock-group">數位雲端</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">118.5</div>
+                        <div class="change positive">+9.72%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-04-15（6日前）</span><span class="detail-item">跳空：2026-04-16（漲停後第1日）</span><span class="detail-item">量比：15.74x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+        <div class="stock-card" data-c1="true" 
+             data-c2="true"
+             data-c3="false"
+             data-c4="true"
+             data-score="3">
+            <a href="https://www.wantgoo.com/stock/7631/technical-chart" target="_blank" class="card-link">
+                <div class="card-header">
+                    <div class="stock-info">
+                        <div class="stock-code">7631</div>
+                        <div class="stock-name">聚賢研發-創</div>
+                        <div class="stock-group">其他電子業</div>
+                    </div>
+                    <div class="price-info">
+                        <div class="price">136.0</div>
+                        <div class="change negative">-3.2%</div>
+                    </div>
+                </div>
+                <div class="score-bar">
+                    <div class="score-fill" style="width:75.0%"></div>
+                    <span class="score-label">3/4 條件</span>
+                </div>
+                <div class="badges"><span class="badge badge-c1 active">漲停</span><span class="badge badge-c2 active">跳空</span><span class="badge badge-c3 ">新高+紅K</span><span class="badge badge-c4 active">量增</span></div>
+                <div class="details"><span class="detail-item">漲停：2026-04-14（7日前）</span><span class="detail-item">跳空：2026-04-16（漲停後第2日）</span><span class="detail-item">量比：2.41x</span></div>
+                <div class="view-btn">查看技術圖 →</div>
+            </a>
+        </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    長線翻倍選股系統 · 資料來源：Yahoo Finance · 僅供參考，不構成投資建議
+  </div>
+</footer>
+
+<script>
+  function applyFilter() {
+    const c1 = document.querySelector('#cb1 input').checked;
+    const c2 = document.querySelector('#cb2 input').checked;
+    const c3 = document.querySelector('#cb3 input').checked;
+    const c4 = document.querySelector('#cb4 input').checked;
+    const minScore = parseInt(document.getElementById('min-score').value);
+    const sortBy = document.getElementById('sort-by').value;
+    
+    // 更新 checkbox 樣式
+    ['cb1','cb2','cb3','cb4'].forEach(id => {
+      const label = document.getElementById(id);
+      label.classList.toggle('active', label.querySelector('input').checked);
+    });
+    
+    const cards = Array.from(document.querySelectorAll('.stock-card'));
+    let visible = [];
+    
+    cards.forEach(card => {
+      const dc1 = card.dataset.c1 === 'true';
+      const dc2 = card.dataset.c2 === 'true';
+      const dc3 = card.dataset.c3 === 'true';
+      const dc4 = card.dataset.c4 === 'true';
+      const score = parseInt(card.dataset.score);
+      
+      let show = score >= minScore;
+      if (c1 && !dc1) show = false;
+      if (c2 && !dc2) show = false;
+      if (c3 && !dc3) show = false;
+      if (c4 && !dc4) show = false;
+      
+      card.classList.toggle('hidden', !show);
+      if (show) visible.push(card);
+    });
+    
+    // 排序
+    const grid = document.getElementById('stocks-grid');
+    visible.sort((a, b) => {
+      if (sortBy === 'score') return parseInt(b.dataset.score) - parseInt(a.dataset.score);
+      if (sortBy === 'change-up') return parseFloat(b.dataset.change||0) - parseFloat(a.dataset.change||0);
+      if (sortBy === 'change-down') return parseFloat(a.dataset.change||0) - parseFloat(b.dataset.change||0);
+      if (sortBy === 'price-up') return parseFloat(b.dataset.price||0) - parseFloat(a.dataset.price||0);
+      if (sortBy === 'price-down') return parseFloat(a.dataset.price||0) - parseFloat(b.dataset.price||0);
+      return 0;
+    });
+    
+    visible.forEach(card => grid.appendChild(card));
+    
+    const shownCount = visible.length;
+    document.getElementById('shown-count').textContent = shownCount;
+    document.getElementById('shown-count2').textContent = shownCount;
+  }
+  
+  function resetFilter() {
+    document.querySelectorAll('.filter-checkbox input').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.filter-checkbox').forEach(lb => lb.classList.remove('active'));
+    document.getElementById('min-score').value = '3';
+    document.getElementById('sort-by').value = 'score';
+    applyFilter();
+  }
+  
+  // 把 data 屬性補完
+  document.querySelectorAll('.stock-card').forEach(card => {
+    const priceEl = card.querySelector('.price');
+    const changeEl = card.querySelector('.change');
+    if (priceEl) card.dataset.price = priceEl.textContent;
+    if (changeEl) {
+      const t = changeEl.textContent.replace('%','').replace('+','');
+      card.dataset.change = t;
+    }
+  });
+</script>
+</body>
+</html>
