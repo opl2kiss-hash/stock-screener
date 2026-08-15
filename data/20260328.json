@@ -1,0 +1,130 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [
+    {
+      "symbol": "7721",
+      "name": "微程式",
+      "close": 61.2,
+      "change": 9.87,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 76,
+        "limit_up_date": "2026-02-25",
+        "limit_up_days_ago": 21,
+        "gap_idx": 77,
+        "gap_date": "2026-02-26",
+        "gap_days_after_limit": 1,
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 1.89
+      },
+      "passed": true,
+      "passed_count": 4
+    },
+    {
+      "symbol": "2616",
+      "name": "山隆",
+      "close": 17.3,
+      "change": 0.0,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 78,
+        "limit_up_date": "2026-03-02",
+        "limit_up_days_ago": 19,
+        "gap_idx": 79,
+        "gap_date": "2026-03-03",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 1.75
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3005",
+      "name": "神基",
+      "close": 107.0,
+      "change": -2.28,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 78,
+        "limit_up_date": "2026-03-02",
+        "limit_up_days_ago": 19,
+        "gap_idx": 84,
+        "gap_date": "2026-03-10",
+        "gap_days_after_limit": 6,
+        "volume_ratio": 1.22
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "4414",
+      "name": "如興",
+      "close": 11.65,
+      "change": -4.51,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 87,
+        "limit_up_date": "2026-03-13",
+        "limit_up_days_ago": 10,
+        "gap_idx": 88,
+        "gap_date": "2026-03-16",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 1.99
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "9931",
+      "name": "欣高",
+      "close": 39.35,
+      "change": -0.25,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 80,
+        "limit_up_date": "2026-03-04",
+        "limit_up_days_ago": 17,
+        "gap_idx": 81,
+        "gap_date": "2026-03-05",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 1.43
+      },
+      "passed": true,
+      "passed_count": 3
+    }
+  ],
+  "generated": "2026-03-28T22:24:15.078386"
+}

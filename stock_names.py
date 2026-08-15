@@ -210,6 +210,28 @@ def _load_all(force_refresh=False):
     }
     return _runtime_cache
 
+# ── 產業別查詢（使用 twstock）─────────────────────────────
+_tw_codes_cache = None
+
+def _get_twstock_codes():
+    """取得 twstock 股票代碼資料（含產業別）"""
+    global _tw_codes_cache
+    if _tw_codes_cache is None:
+        try:
+            import twstock
+            _tw_codes_cache = twstock.codes
+        except ImportError:
+            _tw_codes_cache = {}
+    return _tw_codes_cache
+
+def get_stock_group(symbol):
+    """取得股票產業別，例如：半導體、金融、電腦及週邊等"""
+    codes = _get_twstock_codes()
+    info = codes.get(str(symbol))
+    if info and hasattr(info, 'group') and info.group:
+        return info.group
+    return '其他'
+
 # ── 公開介面 ───────────────────────────────────────────────
 def get_stock_name(symbol, force_refresh=False):
     data = _load_all(force_refresh)

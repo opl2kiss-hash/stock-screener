@@ -48,7 +48,7 @@ case $choice in
     python3 run.py --demo
     ;;
   6)
-    LATEST=$(ls -t "$SCRIPT_DIR/date/"*.html 2>/dev/null | head -1)
+    LATEST=$(ls -t "$SCRIPT_DIR/data/"*.html 2>/dev/null | head -1)
     if [ -z "$LATEST" ]; then
       echo "找不到報告，請先執行篩選"
     else

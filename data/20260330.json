@@ -1,0 +1,130 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [
+    {
+      "symbol": "7721",
+      "name": "微程式",
+      "close": 67.3,
+      "change": 9.97,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 74,
+        "limit_up_date": "2026-02-25",
+        "limit_up_days_ago": 22,
+        "gap_idx": 75,
+        "gap_date": "2026-02-26",
+        "gap_days_after_limit": 1,
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 2.77
+      },
+      "passed": true,
+      "passed_count": 4
+    },
+    {
+      "symbol": "2108",
+      "name": "南帝",
+      "close": 26.7,
+      "change": 2.3,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 72,
+        "limit_up_date": "2026-02-23",
+        "limit_up_days_ago": 24,
+        "gap_idx": 95,
+        "gap_date": "2026-03-27",
+        "gap_days_after_limit": 23,
+        "volume_ratio": 1.48
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2616",
+      "name": "山隆",
+      "close": 18.15,
+      "change": 4.91,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 76,
+        "limit_up_date": "2026-03-02",
+        "limit_up_days_ago": 20,
+        "gap_idx": 77,
+        "gap_date": "2026-03-03",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 1.72
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3005",
+      "name": "神基",
+      "close": 100.0,
+      "change": -6.54,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 76,
+        "limit_up_date": "2026-03-02",
+        "limit_up_days_ago": 20,
+        "gap_idx": 82,
+        "gap_date": "2026-03-10",
+        "gap_days_after_limit": 6,
+        "volume_ratio": 1.31
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "4414",
+      "name": "如興",
+      "close": 11.75,
+      "change": 0.86,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 85,
+        "limit_up_date": "2026-03-13",
+        "limit_up_days_ago": 11,
+        "gap_idx": 86,
+        "gap_date": "2026-03-16",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 1.58
+      },
+      "passed": true,
+      "passed_count": 3
+    }
+  ],
+  "generated": "2026-03-30T17:35:54.620574"
+}

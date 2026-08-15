@@ -144,7 +144,7 @@ def main():
         results = get_demo_data()
     else:
         from stock_screener import run_screening
-        from stock_names import get_all_stock_list, get_twse_list, get_tpex_list, get_stock_name
+        from stock_names import get_all_stock_list, get_twse_list, get_tpex_list, get_stock_name, get_stock_group
         
         if args.refresh:
             from stock_names import clear_cache
@@ -162,9 +162,10 @@ def main():
         print(f"  掃描範圍：{len(stock_list)} 檔股票")
         results = run_screening(stock_list, config)
 
-        # 補上股票名稱
+        # 補上股票名稱與產業別
         for r in results:
             r["name"] = get_stock_name(r["symbol"])
+            r["group"] = get_stock_group(r["symbol"])
     
     # 生成 HTML
     from html_generator import generate_html_report

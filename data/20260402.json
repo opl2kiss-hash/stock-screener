@@ -1,0 +1,82 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [
+    {
+      "symbol": "2108",
+      "name": "南帝",
+      "close": 25.6,
+      "change": -1.16,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 71,
+        "limit_up_date": "2026-02-23",
+        "limit_up_days_ago": 27,
+        "gap_idx": 94,
+        "gap_date": "2026-03-27",
+        "gap_days_after_limit": 23,
+        "volume_ratio": 2.0
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "6277",
+      "name": "宏正",
+      "close": 72.1,
+      "change": -0.14,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 93,
+        "limit_up_date": "2026-03-26",
+        "limit_up_days_ago": 5,
+        "gap_idx": 94,
+        "gap_date": "2026-03-27",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 8.56
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "7721",
+      "name": "微程式",
+      "close": 77.6,
+      "change": 0.91,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 73,
+        "limit_up_date": "2026-02-25",
+        "limit_up_days_ago": 25,
+        "gap_idx": 74,
+        "gap_date": "2026-02-26",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 12.03
+      },
+      "passed": true,
+      "passed_count": 3
+    }
+  ],
+  "generated": "2026-04-02T22:30:18.213838"
+}

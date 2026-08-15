@@ -1,0 +1,12 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [],
+  "generated": "2026-04-06T11:03:54.555040"
+}

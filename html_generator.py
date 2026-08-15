@@ -25,6 +25,7 @@ def generate_html_report(results, config, output_dir=None):
     for r in results:
         symbol = r["symbol"]
         name = r.get("name", symbol)
+        group = r.get("group", "")
         close = r.get("close", 0)
         change = r.get("change", 0)
         passed_count = r.get("passed_count", 0)
@@ -52,9 +53,13 @@ def generate_html_report(results, config, output_dir=None):
         # 詳情
         detail_items = ""
         if details.get("limit_up_date"):
-            detail_items += f'<span class="detail-item">漲停日：{details["limit_up_date"]}</span>'
+            days_ago = details.get("limit_up_days_ago", "")
+            days_ago_str = f"（{days_ago}日前）" if days_ago != "" else ""
+            detail_items += f'<span class="detail-item">漲停：{details["limit_up_date"]}{days_ago_str}</span>'
         if details.get("gap_date"):
-            detail_items += f'<span class="detail-item">跳空日：{details["gap_date"]}</span>'
+            gap_after = details.get("gap_days_after_limit", "")
+            gap_after_str = f"（漲停後第{gap_after}日）" if gap_after != "" else ""
+            detail_items += f'<span class="detail-item">跳空：{details["gap_date"]}{gap_after_str}</span>'
         if details.get("consecutive_red"):
             detail_items += f'<span class="detail-item">連紅：{details["consecutive_red"]}根</span>'
         if details.get("volume_ratio"):
@@ -74,6 +79,7 @@ def generate_html_report(results, config, output_dir=None):
                     <div class="stock-info">
                         <div class="stock-code">{symbol}</div>
                         <div class="stock-name">{name}</div>
+                        {f'<div class="stock-group">{group}</div>' if group else ''}
                     </div>
                     <div class="price-info">
                         <div class="price">{close}</div>
@@ -429,6 +435,18 @@ def generate_html_report(results, config, output_dir=None):
     font-size: 14px;
     color: var(--muted);
     margin-top: 3px;
+  }}
+
+  .stock-group {{
+    display: inline-block;
+    font-size: 10px;
+    color: #79c0ff;
+    background: rgba(56,139,253,0.12);
+    border: 1px solid rgba(56,139,253,0.25);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-top: 5px;
+    letter-spacing: 0.5px;
   }}
 
   .price-info {{ text-align: right; }}

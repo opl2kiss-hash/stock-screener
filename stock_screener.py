@@ -9,6 +9,13 @@
 4. 持續量增，量能大於1.2倍以上
 """
 
+import resource as _resource
+try:
+    _soft, _hard = _resource.getrlimit(_resource.RLIMIT_NOFILE)
+    _resource.setrlimit(_resource.RLIMIT_NOFILE, (min(_hard, 65536), _hard))
+except Exception:
+    pass
+
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -17,18 +24,40 @@ import json
 import os
 import time
 import warnings
+import tempfile
 warnings.filterwarnings('ignore')
+
+# 修復 yfinance SQLite 快取錯誤（雙重保險）
+try:
+    yf.set_tz_cache_location(tempfile.gettempdir())
+except Exception:
+    pass
+try:
+    import appdirs as _appdirs
+except ImportError:
+    pass
+try:
+    # 停用 yfinance 時區快取，避免 SQLite fd 洩漏
+    from yfinance import utils as _yf_utils
+    if hasattr(_yf_utils, 'get_json'):
+        pass
+except Exception:
+    pass
 
 # ===== 篩選參數設定（可調整）=====
 CONFIG = {
     "consolidation_days": 60,        # 橫盤整理天數（30~90）
-    "limit_up_threshold": 0.09,      # 漲停門檻（台股約9.5%，設9%）
+    "limit_up_threshold": 0.08,      # 漲停門檻（設8%以上）
+    "limit_up_volume_ratio": 2.0,    # 漲停當日量須為30日均量幾倍（預設2倍）
+    "limit_up_volume_days": 30,      # 計算均量的天數
     "gap_threshold": 0.01,           # 跳空缺口門檻（1%）
     "new_high_days": 90,             # 新高天數
     "consecutive_red": 3,            # 連續紅K棒最低根數
     "volume_ratio": 1.2,             # 量增倍數（1.2倍）
     "volume_avg_days": 20,           # 計算量能均值天數
     "consolidation_range": 0.10,     # 橫盤振幅門檻（10%以內視為橫盤）
+    "gap_after_limit_days": 30,      # 漲停後幾個交易日內須出現跳空（預設30）
+    "limit_up_max_days_ago": 30,     # 漲停距今最多幾個交易日（預設30）
 }
 
 def get_tw_stock_list():
@@ -63,8 +92,8 @@ def fetch_stock_data(symbol, days=120):
     """抓取股票歷史資料"""
     try:
         tw_symbol = f"{symbol}.TW"
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=days + 30)
+        end_date = datetime.now() + timedelta(days=1)  # +1天確保yfinance回傳最新交易日資料
+        start_date = datetime.now() - timedelta(days=days + 30)
         
         df = yf.download(tw_symbol, start=start_date, end=end_date, 
                         progress=False, auto_adjust=True)
@@ -95,26 +124,54 @@ def is_consolidation(df, start_idx, end_idx, threshold=None):
     return price_range <= threshold
 
 def check_limit_up(df, start_idx, end_idx, threshold=None):
-    """檢查是否有漲停（單日漲幅超過門檻）"""
+    """
+    檢查是否有強勢漲停：
+      1. 單日漲幅 >= threshold（預設8%）
+      2. 當日成交量 >= 前30日均量 * limit_up_volume_ratio（預設2倍）
+    """
     if threshold is None:
         threshold = CONFIG["limit_up_threshold"]
-    
+    vol_ratio = CONFIG.get("limit_up_volume_ratio", 2.0)
+    vol_days  = CONFIG.get("limit_up_volume_days", 30)
+
     segment = df.iloc[start_idx:end_idx]
-    
+
     for i in range(1, len(segment)):
-        prev_close = segment['close'].iloc[i-1]
-        curr_close = segment['close'].iloc[i]
+        abs_i = i + start_idx   # 在原始 df 中的位置
+
+        prev_close = segment["close"].iloc[i-1]
+        curr_close = segment["close"].iloc[i]
         change = (curr_close - prev_close) / prev_close
-        if change >= threshold:
-            return True, i + start_idx
+
+        if change < threshold:
+            continue
+
+        # 漲幅達標，再檢查量能
+        curr_vol = segment["volume"].iloc[i]
+        # 取漲停前 vol_days 天的均量（不含當天）
+        vol_start = max(0, abs_i - vol_days)
+        avg_vol = df["volume"].iloc[vol_start:abs_i].mean()
+
+        if avg_vol > 0 and curr_vol >= avg_vol * vol_ratio:
+            return True, abs_i
+
     return False, -1
 
-def check_gap_up(df, after_idx, threshold=None):
-    """檢查是否有向上跳空缺口"""
+def check_gap_up(df, after_idx, end_idx=None, threshold=None):
+    """
+    檢查是否有向上跳空缺口
+    after_idx: 從哪個 index 開始找（漲停後第一天）
+    end_idx:   找到哪個 index 為止（不含），None 表示找到底
+    threshold: 跳空門檻
+    """
     if threshold is None:
         threshold = CONFIG["gap_threshold"]
-    
-    for i in range(after_idx, len(df) - 1):
+    if end_idx is None:
+        end_idx = len(df)
+
+    for i in range(after_idx, min(end_idx, len(df))):
+        if i < 1:
+            continue
         curr_open = df['open'].iloc[i]
         prev_high = df['high'].iloc[i-1]
         if curr_open > prev_high * (1 + threshold):
@@ -212,26 +269,37 @@ def screen_stock(symbol, config=None):
     # 條件1：橫盤整理中有漲停
     lookback = min(CONFIG["consolidation_days"], n - 10)
     start_idx = max(0, n - lookback)
-    
+
     has_limit, limit_idx = check_limit_up(df, start_idx, n - 5,
                                            CONFIG["limit_up_threshold"])
-    
+
     if has_limit:
-        # 確認漲停前後有橫盤
+        # 確認漲停前有橫盤
         pre_start = max(0, limit_idx - 20)
-        if is_consolidation(df, pre_start, limit_idx):
+        days_ago = n - 1 - limit_idx
+        max_days = CONFIG.get("limit_up_max_days_ago", 30)  # 漲停距今最多30個交易日
+        if is_consolidation(df, pre_start, limit_idx) and days_ago <= max_days:
             result["conditions"]["c1_limit_up"] = True
             result["details"]["limit_up_idx"] = int(limit_idx)
             result["details"]["limit_up_date"] = str(df.index[limit_idx].date())
-    
-    # 條件2：後續橫盤中有向上跳空缺口
-    search_from = result["details"].get("limit_up_idx", n - 30)
-    has_gap, gap_idx = check_gap_up(df, search_from)
-    
+            result["details"]["limit_up_days_ago"] = int(days_ago)
+
+    # 條件2：漲停後「30個交易日內」出現向上跳空缺口
+    gap_window = CONFIG.get("gap_after_limit_days", 30)
+
+    if result["conditions"]["c1_limit_up"]:
+        limit_idx_val = result["details"]["limit_up_idx"]
+        search_from = limit_idx_val + 1
+        search_to   = min(n, limit_idx_val + 1 + gap_window)
+        has_gap, gap_idx = check_gap_up(df, search_from, search_to)
+    else:
+        has_gap, gap_idx = False, -1
+
     if has_gap:
         result["conditions"]["c2_gap_up"] = True
         result["details"]["gap_idx"] = int(gap_idx)
         result["details"]["gap_date"] = str(df.index[gap_idx].date())
+        result["details"]["gap_days_after_limit"] = int(gap_idx - result["details"]["limit_up_idx"])
     
     # 條件3：90日內新高 + 連續紅K
     is_new_high = check_new_high(df, CONFIG["new_high_days"])

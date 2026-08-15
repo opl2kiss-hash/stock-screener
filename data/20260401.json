@@ -1,0 +1,59 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [
+    {
+      "symbol": "2108",
+      "name": "南帝",
+      "close": 25.9,
+      "change": 0.97,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 71,
+        "limit_up_date": "2026-02-23",
+        "limit_up_days_ago": 26,
+        "gap_idx": 94,
+        "gap_date": "2026-03-27",
+        "gap_days_after_limit": 23,
+        "volume_ratio": 2.19
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "7721",
+      "name": "微程式",
+      "close": 76.9,
+      "change": 3.92,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 73,
+        "limit_up_date": "2026-02-25",
+        "limit_up_days_ago": 24,
+        "gap_idx": 74,
+        "gap_date": "2026-02-26",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 11.39
+      },
+      "passed": true,
+      "passed_count": 3
+    }
+  ],
+  "generated": "2026-04-01T17:57:35.959657"
+}

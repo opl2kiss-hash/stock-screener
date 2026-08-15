@@ -1,0 +1,107 @@
+{
+  "config": {
+    "consolidation_days": 60,
+    "limit_up_threshold": 0.09,
+    "gap_threshold": 0.01,
+    "new_high_days": 90,
+    "consecutive_red": 3,
+    "volume_ratio": 1.2
+  },
+  "results": [
+    {
+      "symbol": "7721",
+      "name": "微程式",
+      "close": 74.0,
+      "change": 9.96,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": true,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 73,
+        "limit_up_date": "2026-02-25",
+        "limit_up_days_ago": 23,
+        "gap_idx": 74,
+        "gap_date": "2026-02-26",
+        "gap_days_after_limit": 1,
+        "consecutive_red": 3,
+        "is_new_high": true,
+        "volume_ratio": 3.37
+      },
+      "passed": true,
+      "passed_count": 4
+    },
+    {
+      "symbol": "2108",
+      "name": "南帝",
+      "close": 25.65,
+      "change": -3.93,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 71,
+        "limit_up_date": "2026-02-23",
+        "limit_up_days_ago": 25,
+        "gap_idx": 94,
+        "gap_date": "2026-03-27",
+        "gap_days_after_limit": 23,
+        "volume_ratio": 1.88
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "2616",
+      "name": "山隆",
+      "close": 17.0,
+      "change": -6.34,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 75,
+        "limit_up_date": "2026-03-02",
+        "limit_up_days_ago": 21,
+        "gap_idx": 76,
+        "gap_date": "2026-03-03",
+        "gap_days_after_limit": 1,
+        "volume_ratio": 1.28
+      },
+      "passed": true,
+      "passed_count": 3
+    },
+    {
+      "symbol": "3005",
+      "name": "神基",
+      "close": 97.5,
+      "change": -2.5,
+      "conditions": {
+        "c1_limit_up": true,
+        "c2_gap_up": true,
+        "c3_new_high": false,
+        "c4_volume": true
+      },
+      "details": {
+        "limit_up_idx": 75,
+        "limit_up_date": "2026-03-02",
+        "limit_up_days_ago": 21,
+        "gap_idx": 81,
+        "gap_date": "2026-03-10",
+        "gap_days_after_limit": 6,
+        "volume_ratio": 1.33
+      },
+      "passed": true,
+      "passed_count": 3
+    }
+  ],
+  "generated": "2026-03-31T16:48:13.115705"
+}
