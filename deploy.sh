@@ -13,7 +13,7 @@ echo "================================================"
 
 echo ""
 echo "▶ [1/3] 開始掃描..."
-python3 "$SCRIPT_DIR/run.py" --no-open
+python3 "$SCRIPT_DIR/長線翻倍_v1.py" --no-open
 if [ $? -ne 0 ]; then
   echo "❌ 掃描失敗"
   exit 1

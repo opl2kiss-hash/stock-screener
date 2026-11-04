@@ -25,27 +25,27 @@ case $choice in
   1)
     echo ""
     echo "▶ 完整掃描上市＋上櫃（排除ETF）..."
-    python3 run.py
+    python3 長線翻倍_v1.py
     ;;
   2)
     echo ""
     echo "▶ 掃描上市股票..."
-    python3 run.py --twse
+    python3 長線翻倍_v1.py --twse
     ;;
   3)
     echo ""
     echo "▶ 掃描上櫃股票..."
-    python3 run.py --tpex
+    python3 長線翻倍_v1.py --tpex
     ;;
   4)
     echo ""
     read -p "請輸入股票代碼（空格分隔，例如：2330 2317 2454）: " codes
-    python3 run.py --list $codes
+    python3 長線翻倍_v1.py --list $codes
     ;;
   5)
     echo ""
     echo "▶ 示範模式..."
-    python3 run.py --demo
+    python3 長線翻倍_v1.py --demo
     ;;
   6)
     LATEST=$(ls -t "$SCRIPT_DIR/data/"*.html 2>/dev/null | head -1)
@@ -65,7 +65,7 @@ case $choice in
   7)
     echo ""
     echo "▶ 強制更新股票清單後完整掃描..."
-    python3 run.py --refresh
+    python3 長線翻倍_v1.py --refresh
     ;;
   0)
     echo "再見！"

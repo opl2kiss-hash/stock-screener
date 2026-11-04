@@ -3,13 +3,13 @@
 """
 長線翻倍選股系統 — 主執行入口
 用法：
-  python run.py                    # 完整掃描（上市+上櫃，排除ETF）
-  python run.py --twse             # 只掃上市
-  python run.py --tpex             # 只掃上櫃
-  python run.py --demo             # 快速 Demo（不需網路）
-  python run.py --list 2330 2317   # 只篩選指定股票
-  python run.py --refresh          # 強制更新股票清單快取後再掃描
-  python run.py --no-open          # 掃完不自動開瀏覽器
+  python 長線翻倍_v1.py                    # 完整掃描（上市+上櫃，排除ETF）
+  python 長線翻倍_v1.py --twse             # 只掃上市
+  python 長線翻倍_v1.py --tpex             # 只掃上櫃
+  python 長線翻倍_v1.py --demo             # 快速 Demo（不需網路）
+  python 長線翻倍_v1.py --list 2330 2317   # 只篩選指定股票
+  python 長線翻倍_v1.py --refresh          # 強制更新股票清單快取後再掃描
+  python 長線翻倍_v1.py --no-open          # 掃完不自動開瀏覽器
 """
 
 import resource as _resource
@@ -114,6 +114,31 @@ TOP50_STOCKS = [
     "5274", "6271", "2301", "2385", "5483", "3406", "4958", "6196",
 ]
 
+def prune_old_reports(folders, keep_days=7):
+    """刪除檔名或資料夾名日期超過 keep_days 天的報告；沒有日期的檔案不動。"""
+    import json as _json, re as _re, shutil as _shutil
+    from datetime import date as _date, timedelta as _timedelta
+    from pathlib import Path as _Path
+    cutoff = _date.today() - _timedelta(days=keep_days - 1)
+    for folder in map(_Path, folders):
+        if not folder.is_dir():
+            continue
+        for item in folder.iterdir():
+            m = _re.search(r'(20\d{2})-?(\d{2})-?(\d{2})', item.name)
+            if not m:
+                continue
+            try:
+                day = _date(*map(int, m.groups()))
+            except ValueError:
+                continue
+            if day < cutoff:
+                _shutil.rmtree(item) if item.is_dir() else item.unlink()
+        index = folder / 'reports.json'
+        if index.exists():
+            days = sorted((p.stem for p in folder.glob('*.html')
+                           if _re.fullmatch(r'20\d{2}-?\d{2}-?\d{2}', p.stem)), reverse=True)
+            index.write_text(_json.dumps(days), encoding='utf-8')
+
 def main():
     args = parse_args()
     
@@ -205,6 +230,10 @@ def main():
     import shutil, json, glob
     git_dir = os.path.dirname(os.path.abspath(__file__))
 
+    try:
+        prune_old_reports([os.path.join(git_dir, "date"), os.path.join(git_dir, "data")])
+    except Exception as e:
+        print(f'⚠️  清理舊報告失敗：{e}')
     if os.path.isdir(os.path.join(git_dir, ".git")):
         try:
             today_str = datetime.now().strftime("%Y%m%d")
@@ -230,8 +259,7 @@ def main():
 
             # git add
             r_add = subprocess.run(
-                ["git", "-C", git_dir, "add",
-                 f"date/{today_str}.html", "date/reports.json"],
+                ["git", "-C", git_dir, "add", "-A", "date", "data"],
                 capture_output=True, text=True
             )
             if r_add.returncode != 0:
