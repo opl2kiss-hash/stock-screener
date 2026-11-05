@@ -199,17 +199,6 @@ def main():
     
     filepath = generate_html_report(results, config, output_dir)
     
-    # 儲存 JSON 結果
-    json_path = filepath.replace('.html', '.json')
-    try:
-        with open(json_path, 'w', encoding='utf-8') as f:
-            json.dump({"config": config, "results": results,
-                       "generated": datetime.now().isoformat()}, f,
-                      ensure_ascii=False, indent=2)
-        print(f"📊 JSON 資料已儲存：{json_path}")
-    except Exception as e:
-        print(f"⚠️  JSON 儲存失敗（不影響後續部署）：{e}")
-    
     # 自動開啟瀏覽器
     if not args.no_open:
         print(f"\n🌐 正在開啟瀏覽器...")

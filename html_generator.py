@@ -8,6 +8,60 @@ import json
 import os
 from datetime import datetime
 
+LIVE_QUOTE_JS = """<script>
+// 即時報價：盤中每 10 秒向本機報價服務更新；連不上時保留選股日收盤價
+(function () {
+  const items = [...document.querySelectorAll('[data-live-id]')];
+  if (!items.length) return;
+  const bar = document.createElement('div');
+  bar.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:99;padding:6px 10px;border-radius:6px;background:rgba(0,0,0,.78);color:#fff;font-size:12px';
+  document.body.appendChild(bar);
+  const inHours = () => {
+    const n = new Date(), m = n.getHours() * 60 + n.getMinutes();
+    return n.getDay() >= 1 && n.getDay() <= 5 && m >= 540 && m <= 815;
+  };
+  function applyQuote(card, price, pct) {
+    const priceEl = card.querySelector('.price'), changeEl = card.querySelector('.change');
+    if (priceEl) priceEl.textContent = price;
+    if (changeEl) {
+      changeEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+      changeEl.classList.toggle('positive', pct >= 0);
+      changeEl.classList.toggle('negative', pct < 0);
+    }
+    card.dataset.price = price;
+    card.dataset.change = pct.toFixed(2);
+  }
+  async function refresh() {
+    try {
+      const ids = [...new Set(items.map(e => e.dataset.liveId))].join(',');
+      const r = await fetch('http://127.0.0.1:8765/api/quotes?stocks=' + encodeURIComponent(ids), {cache: 'no-store'});
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error || 'quote error');
+      const quotes = {};
+      (j.msgArray || []).forEach(q => { if (q && q.c) quotes[q.c] = q; });
+      let n = 0, stamp = '';
+      items.forEach(e => {
+        const q = quotes[e.dataset.liveId];
+        if (!q) return;
+        const p = parseFloat(q.z) > 0 ? parseFloat(q.z) : parseFloat(q.pz);
+        const y = parseFloat(q.y);
+        if (!(p > 0) || !(y > 0)) return;
+        applyQuote(e, p, (p - y) / y * 100);
+        n++;
+        if (!stamp && q.d && q.t) stamp = q.d.slice(4, 6) + '/' + q.d.slice(6, 8) + ' ' + q.t;
+      });
+      bar.textContent = '即時報價 ' + stamp + '（' + n + '/' + items.length + ' 檔）';
+    } catch (e) {
+      bar.textContent = '本機報價服務未連線，顯示選股日收盤價';
+    }
+  }
+  refresh();
+  setInterval(() => { if (inHours() && !document.hidden) refresh(); }, 10000);
+})();
+</script>
+"""
+
+
 def generate_html_report(results, config, output_dir=None):
     """生成 HTML 報告"""
     if output_dir is None:
@@ -69,7 +123,7 @@ def generate_html_report(results, config, output_dir=None):
         score_pct = (passed_count / 4) * 100
         
         cards_html += f"""
-        <div class="stock-card" data-c1="{str(conds.get('c1_limit_up',False)).lower()}" 
+        <div class="stock-card" data-live-id="{symbol}" data-c1="{str(conds.get('c1_limit_up',False)).lower()}" 
              data-c2="{str(conds.get('c2_gap_up',False)).lower()}"
              data-c3="{str(conds.get('c3_new_high',False)).lower()}"
              data-c4="{str(conds.get('c4_volume',False)).lower()}"
@@ -84,6 +138,7 @@ def generate_html_report(results, config, output_dir=None):
                     <div class="price-info">
                         <div class="price">{close}</div>
                         <div class="change {change_class}">{change_sign}{change}%</div>
+                        <div class="screen-close" style="font-size:11px;opacity:.65">選股收盤 {close}</div>
                     </div>
                 </div>
                 <div class="score-bar">
@@ -751,7 +806,13 @@ def generate_html_report(results, config, output_dir=None):
 </script>
 </body>
 </html>"""
-    
+
+    # 每日摘要用的名單內嵌在報告內，不另存檔
+    summary = json.dumps(
+        [{"symbol": str(r.get("symbol", "")), "name": str(r.get("name", ""))} for r in results],
+        ensure_ascii=False).replace('</', '<\\/')
+    html = html.replace('</body>', f'<script type="application/json" id="result-data">{summary}</script>\n{LIVE_QUOTE_JS}</body>', 1)
+
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(html)
     
