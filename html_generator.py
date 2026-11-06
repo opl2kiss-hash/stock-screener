@@ -11,6 +11,12 @@ from datetime import datetime
 LIVE_QUOTE_JS = """<script>
 // 即時報價：盤中每 10 秒向本機報價服務更新；連不上時保留選股日收盤價
 (function () {
+  if (location.protocol === 'file:' && location.pathname.includes('/data/')) {
+    const s = document.createElement('script');
+    s.src = 'http://127.0.0.1:8765/api/ping.js';
+    s.onload = () => location.replace('http://127.0.0.1:8765/changxian/' + location.pathname.split('/').pop());
+    document.head.appendChild(s);
+  }
   const items = [...document.querySelectorAll('[data-live-id]')];
   if (!items.length) return;
   const bar = document.createElement('div');
@@ -48,7 +54,7 @@ LIVE_QUOTE_JS = """<script>
         if (!(p > 0) || !(y > 0)) return;
         applyQuote(e, p, (p - y) / y * 100);
         n++;
-        if (!stamp && q.d && q.t) stamp = q.d.slice(4, 6) + '/' + q.d.slice(6, 8) + ' ' + q.t;
+        if (q.d && q.t) { const s = q.d.slice(4, 6) + '/' + q.d.slice(6, 8) + ' ' + q.t; if (s > stamp) stamp = s; }
       });
       bar.textContent = '即時報價 ' + stamp + '（' + n + '/' + items.length + ' 檔）';
     } catch (e) {
@@ -56,7 +62,7 @@ LIVE_QUOTE_JS = """<script>
     }
   }
   refresh();
-  setInterval(() => { if (inHours() && !document.hidden) refresh(); }, 10000);
+  setInterval(() => { if (inHours()) refresh(); }, 10000);
 })();
 </script>
 """
