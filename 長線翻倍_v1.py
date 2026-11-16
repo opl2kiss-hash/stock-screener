@@ -114,7 +114,7 @@ TOP50_STOCKS = [
     "5274", "6271", "2301", "2385", "5483", "3406", "4958", "6196",
 ]
 
-def prune_old_reports(folders, keep_days=7):
+def prune_old_reports(folders, keep_days=30):
     """刪除檔名或資料夾名日期超過 keep_days 天的報告；沒有日期的檔案不動。"""
     import json as _json, re as _re, shutil as _shutil
     from datetime import date as _date, timedelta as _timedelta
