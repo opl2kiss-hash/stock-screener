@@ -821,6 +821,13 @@ def generate_html_report(results, config, output_dir=None):
 
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(html)
+    try:  # 近 60 日走勢小圖（每日排程/走勢小圖.py），失敗不影響報告
+        import sys as _spark_sys, os as _spark_os
+        _spark_sys.path.append(_spark_os.path.expanduser('~/Desktop/每日排程'))
+        import 走勢小圖
+        走勢小圖.inject(filepath)
+    except Exception as _spark_err:
+        print(f'⚠️  走勢小圖略過：{_spark_err}')
     
     print(f"✅ HTML 報告已生成：{filepath}")
     return filepath
