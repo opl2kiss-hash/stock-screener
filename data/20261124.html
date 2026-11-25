@@ -811,5 +811,23 @@
   setInterval(() => { if (inHours()) refresh(); }, 10000);
 })();
 </script>
+
+<!--SPARK--><script>(function(){var D={"1454":[[53,55,50,39,42,37,32,34,45,42,39,71,53,50,55,58,58,58,50,55,45,42,34,37,34,32,29,37,32,37,100,84,76,71,58,58,42,29,26,26,26,26,24,24,21,18,24,13,0,26,32,21,37,26,26,26,24,24,37,71],[55,53,52,50,49,48,46,44,43,43,42,44,45,45,46,47,48,48,48,48,48,48,48,49,49,48,47,47,45,44,47,48,49,50,50,51,50,49,48,48,47,46,46,46,45,44,43,38,33,30,28,26,24,24,23,23,23,23,24,26],[71,71,71,70,70,69,69,68,68,68,67,67,66,66,65,64,63,63,62,61,60,60,59,59,58,58,57,57,57,56,57,57,58,58,58,58,57,57,56,56,55,55,54,54,53,53,52,52,51,51,50,50,50,49,49,48,48,48,47,47]],"2429":[[52,52,48,47,45,41,36,38,36,32,32,36,32,33,30,36,36,36,41,36,34,33,34,35,34,34,30,32,31,30,47,40,57,75,63,57,54,54,48,46,55,48,39,42,31,35,23,22,25,32,32,33,42,39,41,29,12,0,3,17],[44,45,46,46,47,47,47,47,47,45,43,42,41,41,40,40,39,38,37,37,36,35,35,35,35,34,34,34,34,34,35,35,37,39,40,41,42,44,44,45,46,47,48,48,48,48,48,47,46,44,42,40,39,38,37,36,34,31,28,27],[100,100,99,99,98,98,97,97,95,94,92,91,89,88,87,85,84,83,82,80,79,78,77,76,74,73,72,71,70,69,68,67,66,66,65,64,63,63,62,62,61,61,60,60,59,59,58,58,57,56,56,55,55,55,54,53,52,51,49,48]],"2603":[[41,43,41,44,50,45,52,43,43,38,45,41,45,49,44,52,56,54,56,56,57,57,50,52,50,53,45,48,43,43,74,86,84,76,88,83,80,77,80,82,84,82,96,100,89,91,79,62,60,74,77,69,77,76,75,77,62,43,45,76],[34,36,38,40,43,44,46,47,49,50,50,49,49,48,47,46,45,46,47,48,49,49,49,49,50,50,51,51,51,51,52,55,57,58,60,61,63,64,65,67,69,71,74,77,79,82,84,83,82,81,81,80,80,80,80,79,78,76,74,73],[0,1,1,2,3,3,4,5,6,6,7,8,8,9,10,10,11,12,12,13,14,14,15,15,16,17,18,18,19,19,20,21,22,23,24,25,25,26,26,27,28,29,30,31,31,32,33,34,35,35,36,37,38,39,40,42,42,43,44,45]],"5258":[[80,82,76,71,70,71,63,67,68,58,59,62,46,46,44,44,48,46,52,47,45,47,45,53,52,50,47,47,51,50,76,72,72,71,79,70,67,69,62,64,66,63,53,54,49,46,38,36,38,40,20,14,31,24,24,24,18,0,9,31],[92,90,88,86,84,81,79,77,76,75,73,72,70,68,66,64,62,60,58,57,55,54,52,52,51,50,49,48,48,48,50,51,53,54,56,57,58,60,61,62,63,63,63,64,64,64,63,61,59,57,54,50,48,45,43,40,38,34,31,29],[100,100,100,100,100,99,99,98,98,98,98,97,97,97,96,96,96,95,95,94,93,93,92,91,90,89,88,87,86,85,85,84,84,83,83,83,82,82,82,81,81,81,81,80,80,79,79,78,77,77,76,75,75,74,73,73,72,71,70,69]]},NS="http://www.w3.org/2000/svg",bg=(getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g)||[0,0,0]).map(Number),light=(bg.length<4||bg[3]>0)&&bg[0]+bg[1]+bg[2]>400;
+function svg(g){var s=document.createElementNS(NS,"svg"),W=104,H=30,n=g[0].length-1;
+s.setAttribute("width",W);s.setAttribute("height",H);s.setAttribute("viewBox","0 0 "+W+" "+H);s.setAttribute("class","mini-k");s.setAttribute("role","img");
+s.setAttribute("aria-label","近60日走勢");var t=document.createElementNS(NS,"title");t.textContent="近60日：股價（"+(light?"黑":"白")+"）、MA17（橘）、MA95（藍）";s.appendChild(t);
+[[2,"#4b8ff0"],[1,"#f0a020"],[0,light?"#1d2733":"#e5edf8"]].forEach(function(p){var l=document.createElementNS(NS,"polyline"),a=[];
+g[p[0]].forEach(function(v,j){if(v!==null)a.push((1+j/n*(W-2)).toFixed(1)+","+(H-2-v/100*(H-4)).toFixed(1))});
+l.setAttribute("points",a.join(" "));l.setAttribute("fill","none");l.setAttribute("stroke",p[1]);l.setAttribute("stroke-width","1.4");s.appendChild(l)});return s}
+function code(e){var m=/wantgoo\.com\/stock\/(?:etf\/)?([0-9A-Za-z]+)/.exec(e.getAttribute("href")||"")||/openChart\(['"]?([0-9A-Za-z]+)/.exec(e.getAttribute("onclick")||"");return m?m[1].toUpperCase():null}
+function add(){document.querySelectorAll('a[href*="wantgoo.com/stock/"],td.name-cell[onclick]').forEach(function(e){
+var c=code(e),g=c&&D[c];if(!g)return;
+var card=e.classList.contains("card-link"),box=e.tagName==="TD"?e:card?(e.querySelector(".stock-name")||e):e.parentNode;
+if(box.querySelector(".mini-k"))return;
+if(box.tagName==="TD"){box.classList.add("mini-td");if(getComputedStyle(box).position==="static")box.style.position="relative"}else if(card)box.style.whiteSpace="nowrap";
+if(box===e||card)box.appendChild(svg(g));else e.after(svg(g))})}
+var st=document.createElement("style");st.textContent=".mini-k{display:inline-block;vertical-align:middle;margin-left:10px;background:"+(light?"transparent":"#0f1a2c")+";border-radius:4px;padding:1px;box-sizing:content-box}td.mini-td{padding-right:124px!important}td.mini-td>.mini-k{position:absolute;right:8px;top:50%;transform:translateY(-50%);margin:0}";document.head.appendChild(st);
+var q=0;function later(){if(!q){q=1;requestAnimationFrame(function(){q=0;add()})}}
+add();new MutationObserver(later).observe(document.body,{childList:true,subtree:true})})();</script><!--/SPARK-->
 </body>
 </html>
